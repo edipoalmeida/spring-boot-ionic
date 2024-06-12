@@ -1,8 +1,12 @@
 package com.ealmeida.springbootionic.cursomc;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
+import com.ealmeida.springbootionic.cursomc.domain.Cidade;
+import com.ealmeida.springbootionic.cursomc.domain.Estado;
 import com.ealmeida.springbootionic.cursomc.domain.Produto;
 import com.ealmeida.springbootionic.cursomc.repositories.CategoriaRepository;
+import com.ealmeida.springbootionic.cursomc.repositories.CidadeRepository;
+import com.ealmeida.springbootionic.cursomc.repositories.EstadoRepository;
 import com.ealmeida.springbootionic.cursomc.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +23,12 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+
+	@Autowired
+	private EstadoRepository estadoRepository;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -42,5 +52,16 @@ public class CursomcApplication implements CommandLineRunner {
 
 		categoriaRepository.saveAll(Arrays.asList(c1,c2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+
+		Estado e1 = new Estado(null, "Minas Gerais");
+		Estado e2 = new Estado(null, "São Paulo");
+
+		Cidade cid1 = new Cidade(null, "Uberlândia", e1);
+		Cidade cid2 = new Cidade(null, "São Paulo", e2);
+		Cidade cid3 = new Cidade(null, "Campinas", e2);
+
+		estadoRepository.saveAll(Arrays.asList(e1,e2));
+		cidadeRepository.saveAll(Arrays.asList(cid1,cid2,cid3));
+
 	}
 }
