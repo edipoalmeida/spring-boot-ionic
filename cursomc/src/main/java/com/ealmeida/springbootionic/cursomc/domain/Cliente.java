@@ -1,6 +1,7 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
 import com.ealmeida.springbootionic.cursomc.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -21,6 +22,7 @@ public class Cliente implements Serializable {
     private Integer tipoCliente;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
