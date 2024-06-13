@@ -1,6 +1,7 @@
 package com.ealmeida.springbootionic.cursomc;
 
 import com.ealmeida.springbootionic.cursomc.domain.*;
+import com.ealmeida.springbootionic.cursomc.domain.enums.EstadoPagamento;
 import com.ealmeida.springbootionic.cursomc.domain.enums.TipoCliente;
 import com.ealmeida.springbootionic.cursomc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -30,6 +33,12 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -74,5 +83,20 @@ public class CursomcApplication implements CommandLineRunner {
 
 		clienteRepository.save(cli1);
 		enderecoRepository.saveAll(Arrays.asList(end1, end2));
+
+		Pedido ped1 = new Pedido(null, LocalDateTime.of(2017, Month.SEPTEMBER, 30, 10, 32), cli1, end1);
+		Pedido ped2 = new Pedido(null, LocalDateTime.of(2017, Month.OCTOBER, 10, 19, 35), cli1, end2);
+
+		Pagamento pag1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pag1);
+
+		Pagamento pag2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE,  ped2, LocalDateTime.of(2017, Month.OCTOBER, 20, 00,00), null);
+		ped2.setPagamento(pag2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+
 	}
 }
