@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
@@ -39,6 +40,9 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -97,6 +101,19 @@ public class CursomcApplication implements CommandLineRunner {
 
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.0, 1, BigDecimal.valueOf(2000.0));
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.0, 2, BigDecimal.valueOf(80.0));
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.0, 1, BigDecimal.valueOf(800.0));
+
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().add(ip3);
+
+		p1.getItens().add(ip1);
+		p2.getItens().add(ip3);
+		p3.getItens().add(ip2);
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 
 	}
 }
