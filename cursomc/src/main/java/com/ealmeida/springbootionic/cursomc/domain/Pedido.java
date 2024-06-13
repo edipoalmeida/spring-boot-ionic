@@ -1,11 +1,14 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,18 +21,21 @@ public class Pedido implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime instante;
 
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_entrega_id")
-    private Endereco endereco;
+    @JoinColumn(name = "enderecoEntrega_entrega_id")
+    private Endereco enderecoEntrega;
 
     @OneToMany(mappedBy = "id.pedido")
     private Set<ItemPedido> itens = new HashSet<>();
@@ -37,11 +43,11 @@ public class Pedido implements Serializable {
     public Pedido() {
     }
 
-    public Pedido(Integer id, LocalDateTime instante, Cliente cliente, Endereco endereco) {
+    public Pedido(Integer id, LocalDateTime instante, Cliente cliente, Endereco enderecoEntrega) {
         this.id = id;
         this.instante = instante;
         this.cliente = cliente;
-        this.endereco = endereco;
+        this.enderecoEntrega = enderecoEntrega;
     }
 
     public Integer getId() {
@@ -76,12 +82,12 @@ public class Pedido implements Serializable {
         this.cliente = cliente;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Endereco getEnderecoEntrega() {
+        return enderecoEntrega;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setEnderecoEntrega(Endereco enderecoEntrega) {
+        this.enderecoEntrega = enderecoEntrega;
     }
 
     public Set<ItemPedido> getItens() {

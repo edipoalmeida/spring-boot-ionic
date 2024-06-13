@@ -1,6 +1,7 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
 import com.ealmeida.springbootionic.cursomc.domain.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 
 import java.io.Serial;
@@ -11,7 +12,9 @@ public class PagamentoComBoleto extends Pagamento{
 
     @Serial
     private static final long serialVersionUID = -3879209583967963447L;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime dataVencimento;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime dataPagamento;
 
     public PagamentoComBoleto() {

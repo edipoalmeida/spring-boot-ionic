@@ -1,5 +1,6 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 
@@ -13,6 +14,7 @@ public class ItemPedido implements Serializable {
     @Serial
     private static final long serialVersionUID = -5570801505908752343L;
 
+    @JsonIgnore
     @EmbeddedId
     private ItemPedidoPK id = new ItemPedidoPK();
 
@@ -31,6 +33,7 @@ public class ItemPedido implements Serializable {
         this.preco = preco;
     }
 
+    @JsonIgnore
     public Pedido getPedido() {
         return id.getPedido();
     }
