@@ -1,9 +1,7 @@
 package com.ealmeida.springbootionic.cursomc.resources;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
-import com.ealmeida.springbootionic.cursomc.repositories.CategoriaRepository;
 import com.ealmeida.springbootionic.cursomc.services.CategoriaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,7 @@ public class CategoriaResource {
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ResponseEntity<Categoria> listar(@PathVariable Integer id) {
-        return ResponseEntity.ok(categoriaService.buscar(id));
+        return ResponseEntity.ok(categoriaService.find(id));
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -33,5 +31,13 @@ public class CategoriaResource {
                         .fromCurrentRequest().path("/{id}")
                         .buildAndExpand(newCategoria.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@PathVariable Integer id, 
+                                       @RequestBody Categoria newCategoria) {
+        newCategoria.setId(id);
+        categoriaService.update(newCategoria);
+        return ResponseEntity.noContent().build();
     }
 }
