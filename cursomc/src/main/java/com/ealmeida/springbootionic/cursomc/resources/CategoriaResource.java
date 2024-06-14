@@ -3,6 +3,7 @@ package com.ealmeida.springbootionic.cursomc.resources;
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
 import com.ealmeida.springbootionic.cursomc.dto.CategoriaDTO;
 import com.ealmeida.springbootionic.cursomc.services.CategoriaService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,15 @@ public class CategoriaResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CategoriaDTO>> findAll() {
         return ResponseEntity.ok(categoriaService.findAll().stream().map(CategoriaDTO::new).toList());
+    }
+
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
+    public ResponseEntity<Page<CategoriaDTO>> findPage(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                       @RequestParam(name = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+                                                       @RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
+                                                       @RequestParam(name = "direction", defaultValue = "ASC") String direction) {
+        return ResponseEntity
+                .ok(categoriaService.findPage(page, linesPerPage, orderBy, direction).map(CategoriaDTO::new));
     }
 
 }
