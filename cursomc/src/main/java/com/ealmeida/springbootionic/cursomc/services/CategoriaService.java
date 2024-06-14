@@ -2,7 +2,9 @@ package com.ealmeida.springbootionic.cursomc.services;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
 import com.ealmeida.springbootionic.cursomc.repositories.CategoriaRepository;
+import com.ealmeida.springbootionic.cursomc.services.exceptions.DataIntegrityException;
 import com.ealmeida.springbootionic.cursomc.services.exceptions.ObjectNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +30,14 @@ public class CategoriaService {
     public Categoria update(Categoria newCategoria) {
         find(newCategoria.getId());
         return categoriaRepository.save(newCategoria);
+    }
+
+    public void delete(Integer id) {
+        find(id);
+        try {
+            categoriaRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new com.ealmeida.springbootionic.cursomc.services.exceptions.DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
+        }
     }
 }
