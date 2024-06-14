@@ -1,6 +1,7 @@
 package com.ealmeida.springbootionic.cursomc.resources;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
+import com.ealmeida.springbootionic.cursomc.dto.CategoriaDTO;
 import com.ealmeida.springbootionic.cursomc.services.CategoriaService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -28,13 +30,13 @@ public class CategoriaResource {
     public ResponseEntity<Void> create(@RequestBody Categoria newCategoria) {
         newCategoria = categoriaService.insertNew(newCategoria);
         URI uri = ServletUriComponentsBuilder
-                        .fromCurrentRequest().path("/{id}")
-                        .buildAndExpand(newCategoria.getId()).toUri();
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newCategoria.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> update(@PathVariable Integer id, 
+    public ResponseEntity<Void> update(@PathVariable Integer id,
                                        @RequestBody Categoria newCategoria) {
         newCategoria.setId(id);
         categoriaService.update(newCategoria);
@@ -46,4 +48,10 @@ public class CategoriaResource {
         categoriaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<CategoriaDTO>> findAll() {
+        return ResponseEntity.ok(categoriaService.findAll().stream().map(CategoriaDTO::new).toList());
+    }
+
 }
