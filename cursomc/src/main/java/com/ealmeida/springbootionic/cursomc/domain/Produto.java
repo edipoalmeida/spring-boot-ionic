@@ -1,7 +1,9 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ManyToAny;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Produto implements Serializable {
     @Serial
     private static final long serialVersionUID = -4697456681920515092L;
@@ -24,7 +28,6 @@ public class Produto implements Serializable {
     @JoinTable(name = "PRODUTO_CATEGORIA",
             joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-    @JsonBackReference
     private List<Categoria> categorias = new ArrayList<>();
 
     @JsonIgnore

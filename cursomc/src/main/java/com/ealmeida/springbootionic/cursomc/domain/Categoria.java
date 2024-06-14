@@ -1,6 +1,8 @@
 package com.ealmeida.springbootionic.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+property = "id")
 public class Categoria implements Serializable {
     @Serial
     private static final long serialVersionUID = 6255444666347333148L;
@@ -20,7 +24,6 @@ public class Categoria implements Serializable {
     private String nome;
 
     @ManyToMany(mappedBy = "categorias")
-    @JsonManagedReference
     private List<Produto> produtos = new ArrayList<>();
 
     public Categoria() {
