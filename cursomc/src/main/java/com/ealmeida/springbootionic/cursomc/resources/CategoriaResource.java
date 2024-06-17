@@ -3,6 +3,7 @@ package com.ealmeida.springbootionic.cursomc.resources;
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
 import com.ealmeida.springbootionic.cursomc.dto.CategoriaDTO;
 import com.ealmeida.springbootionic.cursomc.services.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class CategoriaResource {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestBody Categoria newCategoria) {
-        newCategoria = categoriaService.insertNew(newCategoria);
+    public ResponseEntity<Void> create(@Valid @RequestBody CategoriaDTO categoriaDTO) {
+        Categoria newCategoria = categoriaService.insert(categoriaService.fromDTO(categoriaDTO));
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newCategoria.getId()).toUri();
@@ -38,7 +39,8 @@ public class CategoriaResource {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@PathVariable Integer id,
-                                       @RequestBody Categoria newCategoria) {
+                                       @Valid @RequestBody CategoriaDTO categoriaDTO) {
+        Categoria newCategoria = categoriaService.fromDTO(categoriaDTO);
         newCategoria.setId(id);
         categoriaService.update(newCategoria);
         return ResponseEntity.noContent().build();

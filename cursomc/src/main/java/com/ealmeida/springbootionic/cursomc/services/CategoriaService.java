@@ -1,8 +1,8 @@
 package com.ealmeida.springbootionic.cursomc.services;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
+import com.ealmeida.springbootionic.cursomc.dto.CategoriaDTO;
 import com.ealmeida.springbootionic.cursomc.repositories.CategoriaRepository;
-import com.ealmeida.springbootionic.cursomc.services.exceptions.DataIntegrityException;
 import com.ealmeida.springbootionic.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class CategoriaService {
                         ", Tipo:" + Categoria.class.getName()));
     }
 
-    public Categoria insertNew(Categoria newCategoria) {
+    public Categoria insert(Categoria newCategoria) {
         newCategoria.setId(null);
         return categoriaRepository.save(newCategoria);
     }
@@ -53,5 +53,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO categoriaDTO) {
+        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 }
