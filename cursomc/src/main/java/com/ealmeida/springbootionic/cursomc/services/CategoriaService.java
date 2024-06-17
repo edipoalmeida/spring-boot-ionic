@@ -1,6 +1,7 @@
 package com.ealmeida.springbootionic.cursomc.services;
 
 import com.ealmeida.springbootionic.cursomc.domain.Categoria;
+import com.ealmeida.springbootionic.cursomc.domain.Cliente;
 import com.ealmeida.springbootionic.cursomc.dto.CategoriaDTO;
 import com.ealmeida.springbootionic.cursomc.repositories.CategoriaRepository;
 import com.ealmeida.springbootionic.cursomc.services.exceptions.ObjectNotFoundException;
@@ -32,10 +33,12 @@ public class CategoriaService {
         return categoriaRepository.save(newCategoria);
     }
 
-    public Categoria update(Categoria newCategoria) {
-        find(newCategoria.getId());
-        return categoriaRepository.save(newCategoria);
+    public Categoria update(Categoria categoria) {
+        Categoria newObj = find(categoria.getId());
+        updateData(newObj, categoria);
+        return categoriaRepository.save(newObj);
     }
+
 
     public void delete(Integer id) {
         find(id);
@@ -57,5 +60,10 @@ public class CategoriaService {
 
     public Categoria fromDTO(CategoriaDTO categoriaDTO) {
         return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
+    }
+
+
+    private void updateData(Categoria newObj, Categoria categoria) {
+        newObj.setNome(categoria.getNome());
     }
 }
